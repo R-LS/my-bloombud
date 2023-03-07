@@ -39,10 +39,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import org.tensorflow.lite.examples.classification.ml.FlowerModel
 import org.tensorflow.lite.examples.classification.ui.RecognitionAdapter
 import org.tensorflow.lite.examples.classification.util.YuvToRgbConverter
 import org.tensorflow.lite.examples.classification.viewmodel.Recognition
 import org.tensorflow.lite.examples.classification.viewmodel.RecognitionListViewModel
+import org.tensorflow.lite.support.image.TensorImage
 import java.util.concurrent.Executors
 import kotlin.random.Random
 
@@ -207,6 +209,7 @@ class MainActivity : AppCompatActivity() {
         ImageAnalysis.Analyzer {
 
         // TODO 1: Add class variable TensorFlow Lite Model
+        private val flowerModel = FlowerModel.newInstance(ctx)
         // Initializing the flowerModel by lazy so that it runs in the same thread when the process
         // method is called.
 
@@ -218,15 +221,17 @@ class MainActivity : AppCompatActivity() {
             val items = mutableListOf<Recognition>()
 
             // TODO 2: Convert Image to Bitmap then to TensorImage
-
+            val tfImage = TensorImage.fromBitmap(toBitmap(imageProxy))
             // TODO 3: Process the image using the trained model, sort and pick out the top results
-
+            val outputs = flowerModel.process(tfImage)
+                .probabilityAsCategoryList.apply {
+                    sortByDescending { it.score } // Sort with highest confidence first
+                }.take(MAX_RESULT_DISPLAY) // take the top results
             // TODO 4: Converting the top probability items into a list of recognitions
-
-            // START - Placeholder code at the start of the codelab. Comment this block of code out.
-            for (i in 0 until MAX_RESULT_DISPLAY){
-                items.add(Recognition("Fake label $i", Random.nextFloat()))
+            for (output in outputs) {
+                items.add(Recognition(output.label, output.score))
             }
+            // START - Placeholder code at the start of the codelab. Comment this block of code out.
             // END - Placeholder code at the start of the codelab. Comment this block of code out.
 
             // Return the result
