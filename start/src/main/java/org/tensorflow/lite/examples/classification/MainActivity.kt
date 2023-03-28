@@ -19,12 +19,14 @@ package org.tensorflow.lite.examples.classification
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -45,6 +47,7 @@ import org.tensorflow.lite.examples.classification.util.YuvToRgbConverter
 import org.tensorflow.lite.examples.classification.viewmodel.Recognition
 import org.tensorflow.lite.examples.classification.viewmodel.RecognitionListViewModel
 import org.tensorflow.lite.support.image.TensorImage
+import java.util.ArrayList
 import java.util.concurrent.Executors
 import kotlin.random.Random
 
@@ -118,6 +121,25 @@ class MainActivity : AppCompatActivity() {
         ContextCompat.checkSelfPermission(
             baseContext, it
         ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    fun onClickBloomBuds(v: View){
+        val myIntent = Intent(this, MyBloomBudsActivity::class.java)
+        startActivity(myIntent)
+
+    }
+    fun onCaptureResult(v:View){
+        Log.d("recognition clicked","oncapture result clicked")
+        Log.d("recognition listener","${recogViewModel.recognitionList.value.toString()}")
+        val resultList = recogViewModel.recognitionList.value.toString()
+        val pieces = resultList.substring(1,resultList.length-1).split(", ")
+        Log.d("recognition plant1","${pieces[0]}")
+        val myIntent = Intent(this, PlantSpeciesResult::class.java)
+        myIntent.putExtra("species1",pieces[0])
+        myIntent.putExtra("species2",pieces[1])
+        myIntent.putExtra("species3",pieces[2])
+        startActivity(myIntent)
+
     }
 
     /**
@@ -206,6 +228,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private class ImageAnalyzer(ctx: Context, private val listener: RecognitionListener) :
+
         ImageAnalysis.Analyzer {
 
         // TODO 1: Add class variable TensorFlow Lite Model

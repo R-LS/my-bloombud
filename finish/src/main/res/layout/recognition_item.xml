@@ -18,7 +18,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="recognitionItem"
             type="org.tensorflow.lite.examples.classification.viewmodel.Recognition" />
@@ -40,6 +39,7 @@
             android:textColor="@color/white"
             android:textAppearance="?attr/textAppearanceHeadline6"
             tools:text="Orange" />
+
 
         <TextView
             android:id="@+id/recognitionProb"
