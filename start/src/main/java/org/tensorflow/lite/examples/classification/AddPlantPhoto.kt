@@ -1,4 +1,4 @@
-package org.tensorflow.lite.examples.classification.planttest
+package org.tensorflow.lite.examples.classification
 
 import android.Manifest
 import android.app.Activity
@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -13,25 +14,23 @@ import android.util.Log
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.toBitmap
-import org.tensorflow.lite.examples.classification.R
 import java.io.File
-
 
 private const val TEMP_FILE_NAME = "temp_plant_photo.jpg"
 private const val TAKE_PHOTO_REQUEST_CODE = 42
 private const val SELECT_PHOTO_REQUEST_CODE = 43
-class CameraActivity : AppCompatActivity() {
+class AddPlantPhoto : AppCompatActivity() {
     private var tempPhotoFile: File? = null
+    lateinit var plantImageView: ImageView
 
-    private lateinit var plantImageView: ImageView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_plant_photo)
+
 
         plantImageView = findViewById<ImageView>(R.id.plantImageView)
 
@@ -47,7 +46,10 @@ class CameraActivity : AppCompatActivity() {
     }
 
     fun takePhoto() {
-        val hasCameraPermissions = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+        val hasCameraPermissions = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED
         if (!hasCameraPermissions) {
             ActivityCompat.requestPermissions(
                 this,
@@ -59,11 +61,10 @@ class CameraActivity : AppCompatActivity() {
 
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
-        Log.i("packageResourcePath", packageResourcePath)
         tempPhotoFile = createTempPhotoFileForStorage(TEMP_FILE_NAME)
         val fileProvider = FileProvider.getUriForFile(
             this,
-            "org.tensorflow.lite.examples.classification.fileprovider",
+            "${packageName}.fileprovider",
             tempPhotoFile!!
         )
 
@@ -99,7 +100,8 @@ class CameraActivity : AppCompatActivity() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        val hasAllowedPermissions = grantResults.isNotEmpty() && grantResults[0] === PackageManager.PERMISSION_GRANTED
+        val hasAllowedPermissions =
+            grantResults.isNotEmpty() && grantResults[0] === PackageManager.PERMISSION_GRANTED
         if (!hasAllowedPermissions) {
             Toast.makeText(this, "Please allow the required permissions", Toast.LENGTH_SHORT).show()
 
@@ -118,7 +120,10 @@ class CameraActivity : AppCompatActivity() {
     }
 
     private fun selectPhoto() {
-        val hasGalleryPermissions = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+        val hasGalleryPermissions = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
         if (!hasGalleryPermissions) {
             ActivityCompat.requestPermissions(
                 this,
@@ -152,7 +157,8 @@ class CameraActivity : AppCompatActivity() {
 
             Toast.makeText(this, "Image Saved Successfully", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
-            Toast.makeText(this, "Something went wrong while saving image", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Something went wrong while saving image", Toast.LENGTH_SHORT)
+                .show()
         }
     }
 }
