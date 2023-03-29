@@ -25,12 +25,13 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="150dp"
                 android:contentDescription="content_description_media"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/flower"
                 android:id="@+id/flower_detail_iv"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"

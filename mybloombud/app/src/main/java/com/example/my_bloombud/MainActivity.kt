@@ -2,6 +2,7 @@ package com.example.my_bloombud
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,7 +24,12 @@ class MainActivity : AppCompatActivity() {
         var flower_name_list = ArrayList<String>()
         var img_list = ArrayList<String>()
 
-        recyclerview.adapter = RecycleViewAdapter(applicationContext,img_list,flower_name_list)
+        recyclerview.adapter =
+            HomePageRecyclerViewAdapter(
+                applicationContext,
+                img_list,
+                flower_name_list,
+            )
 
         GlobalScope.launch {
             val allPlants = getAllPlants()
@@ -39,15 +45,38 @@ class MainActivity : AppCompatActivity() {
                 //val imageView: ImageView = findViewById(R.id.plantImage)
                 //imageView.setImageBitmap(bitmap)
                 recyclerview.layoutManager = LinearLayoutManager(applicationContext)
-                recyclerview.adapter = RecycleViewAdapter(applicationContext,img_list,flower_name_list)
+                recyclerview.adapter =
+                    HomePageRecyclerViewAdapter(
+                        applicationContext,
+                        img_list,
+                        flower_name_list
+                    )
 
             }
             }
         }
+
+        //Add Intent here -- Scan Plant
+        val btn_scanplant = findViewById<Button>(R.id.btn_scanplant)
+
+        btn_scanplant.setOnClickListener {
+            //val intent = Intent(this, MyActivity::class.java)
+            //startActivity(intent)
+        }
+
+        //Add Intent here -- My Plant
+        val btn_myplant = findViewById<Button>(R.id.btn_myplant)
+
+        btn_myplant.setOnClickListener {
+            //val intent = Intent(this, MyActivity::class.java)
+            //startActivity(intent)
+        }
+
 
         }
 
     }
+
     suspend fun getAllPlants(): String {
         var return_respone = ""
         withContext(Dispatchers.IO) {
