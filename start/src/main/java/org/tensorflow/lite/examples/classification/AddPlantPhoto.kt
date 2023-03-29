@@ -104,7 +104,7 @@ class AddPlantPhoto : AppCompatActivity() {
             grantResults.isNotEmpty() && grantResults[0] === PackageManager.PERMISSION_GRANTED
         if (!hasAllowedPermissions) {
             Toast.makeText(this, "Please allow the required permissions", Toast.LENGTH_SHORT).show()
-
+            return
         }
 
         when (requestCode) {
