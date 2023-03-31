@@ -11,9 +11,9 @@
         android:clickable="true"
         app:cardElevation="0dp"
         app:strokeColor="@color/material_on_surface_stroke"
-        app:strokeWidth="3dp"
+        app:strokeWidth="5dp"
         app:cardBackgroundColor="@color/dark_green"
-        app:cardCornerRadius="4dp"
+        app:cardCornerRadius="8dp"
         >
 
         <LinearLayout
