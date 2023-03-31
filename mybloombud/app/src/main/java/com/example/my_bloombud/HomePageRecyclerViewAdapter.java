@@ -22,32 +22,27 @@ public class HomePageRecyclerViewAdapter extends RecyclerView.Adapter<HomePagePl
 
     private final HomePageRecyclerViewInterface recyclerViewInterface;
     private Context context;
-    private List<String> imgList;
-    private List<String> nameList;
-    private List<String> secondary_text_list;
-    private List<String> supporting_text_list;
 
-    public HomePageRecyclerViewAdapter(HomePageRecyclerViewInterface recyclerViewInterface, Context context, List<String> imgList, List<String> nameList, List<String> secondary_text_list, List<String> supporting_text_list) {
+    private List<HomePagePlantModel> homePagePlantModel_List;
+
+    public HomePageRecyclerViewAdapter(HomePageRecyclerViewInterface recyclerViewInterface, Context context,List<HomePagePlantModel> homePagePlantModel_List) {
         this.recyclerViewInterface = recyclerViewInterface;
         this.context = context;
-        this.imgList = imgList;
-        this.nameList = nameList;
-        this.secondary_text_list = secondary_text_list;
-        this.supporting_text_list = supporting_text_list;
+        this.homePagePlantModel_List = homePagePlantModel_List;
     }
 
     @NonNull
     @Override
     public HomePagePlantsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new HomePagePlantsViewHolder(LayoutInflater.from(context).inflate(R.layout.flower_item_view,parent,false),recyclerViewInterface,nameList);
+        return new HomePagePlantsViewHolder(LayoutInflater.from(context).inflate(R.layout.flower_item_view,parent,false),recyclerViewInterface,homePagePlantModel_List);
     }
 
     @Override
     public void onBindViewHolder(@NonNull HomePagePlantsViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        Log.d("A",nameList.get(position));
-        holder.flower_name_tv.setText((nameList.get(position)));
-        holder.flower_detail_tv.setText((secondary_text_list.get(position)));
-        holder.flower_supporting_text_tv.setText((supporting_text_list.get(position)));
+        Log.d("A",homePagePlantModel_List.get(position).getPlant_name());
+        holder.flower_name_tv.setText((homePagePlantModel_List.get(position).getPlant_name()));
+        holder.flower_detail_tv.setText((homePagePlantModel_List.get(position).getSecondary_text()));
+        holder.flower_supporting_text_tv.setText((homePagePlantModel_List.get(position).getSupporting_text()));
 
         int SDK_INT = android.os.Build.VERSION.SDK_INT;
         if (SDK_INT > 8)
@@ -55,7 +50,7 @@ public class HomePageRecyclerViewAdapter extends RecyclerView.Adapter<HomePagePl
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
                     .permitAll().build();
             StrictMode.setThreadPolicy(policy);
-            holder.flower_iv.setImageBitmap(getBitmapFromURL(imgList.get(position)));
+            holder.flower_iv.setImageBitmap(getBitmapFromURL(homePagePlantModel_List.get(position).getImg_url()));
 
         }
 
@@ -63,7 +58,7 @@ public class HomePageRecyclerViewAdapter extends RecyclerView.Adapter<HomePagePl
 
     @Override
     public int getItemCount() {
-        return imgList.size();
+        return homePagePlantModel_List.size();
     }
 
     public static Bitmap getBitmapFromURL(String src) {

@@ -22,20 +22,14 @@ class HomePageMainActivity : AppCompatActivity(), HomePageRecyclerViewInterface{
         val recyclerViewInterface1 = this
         val recyclerview = findViewById<RecyclerView>(R.id.card_recycleview)
 
+        val homePagePlantModel_List = ArrayList<HomePagePlantModel>();
 
-        var flower_name_list = ArrayList<String>()
-        var img_list = ArrayList<String>()
-        var secondary_text_list = ArrayList<String>()
-        var supporting_text_list = ArrayList<String>()
 
         recyclerview.adapter =
             HomePageRecyclerViewAdapter(
                 this,
                 applicationContext,
-                img_list,
-                flower_name_list,
-                secondary_text_list,
-                supporting_text_list
+                homePagePlantModel_List
             )
 
         GlobalScope.launch {
@@ -44,12 +38,8 @@ class HomePageMainActivity : AppCompatActivity(), HomePageRecyclerViewInterface{
 
             for (i in 0 until plantsArray.length()) {
                 val plant = plantsArray.getJSONObject(i)
-
-                flower_name_list.add(plant.get("name").toString())
-                img_list.add(plant.get("imageUrl").toString())
-                secondary_text_list.add(plant.get("description").toString())
-                supporting_text_list.add(plant.get("supportingText").toString())
-                //println("${plant.get("name")} + ${plant.get("imageUrl")}")
+                val model = HomePagePlantModel(plant.get("name").toString(),plant.get("imageUrl").toString(),plant.get("description").toString(),plant.get("supportingText").toString())
+                homePagePlantModel_List.add(model)
                 withContext(Dispatchers.Main) {
                     //val imageView: ImageView = findViewById(R.id.plantImage)
                     //imageView.setImageBitmap(bitmap)
@@ -58,11 +48,7 @@ class HomePageMainActivity : AppCompatActivity(), HomePageRecyclerViewInterface{
                         HomePageRecyclerViewAdapter(
                             recyclerViewInterface1,
                             applicationContext,
-                            img_list,
-                            flower_name_list,
-                            secondary_text_list,
-                            supporting_text_list
-
+                            homePagePlantModel_List
                         )
 
                 }
