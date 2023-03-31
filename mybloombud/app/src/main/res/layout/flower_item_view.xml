@@ -28,7 +28,6 @@
                 android:layout_height="150dp"
                 android:contentDescription="content_description_media"
                 android:scaleType="centerCrop"
-                app:srcCompat="@drawable/flower"
                 android:id="@+id/flower_detail_iv"
                 android:layout_centerVertical="true"
                 />

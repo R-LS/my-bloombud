@@ -1,11 +1,8 @@
 package com.example.my_bloombud
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.EditText
-import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,10 +14,10 @@ import org.json.JSONArray
 import java.net.HttpURLConnection
 import java.net.URL
 
-class MainActivity : AppCompatActivity(), HomePageRecyclerViewInterface{
+class HomePageMainActivity : AppCompatActivity(), HomePageRecyclerViewInterface{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.home_page_activity_main)
 
         val recyclerViewInterface1 = this
         val recyclerview = findViewById<RecyclerView>(R.id.card_recycleview)
