@@ -31,8 +31,9 @@ public class HomePagePlantsViewHolder extends RecyclerView.ViewHolder{
             public void onClick(View view) {
                 if (recyclerViewInterface != null){
                     int pos = getBindingAdapterPosition();
+
                     String selectedPlant = homePagePlantModel_List.get(pos).getPlant_name();
-                    Log.d("ABC",selectedPlant);
+
                     if(pos != RecyclerView.NO_POSITION){
                         recyclerViewInterface.onItemClick(pos,selectedPlant);
                     }

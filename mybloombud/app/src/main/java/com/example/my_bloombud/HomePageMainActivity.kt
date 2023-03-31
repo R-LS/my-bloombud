@@ -3,7 +3,9 @@ package com.example.my_bloombud
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.Dispatchers
@@ -15,22 +17,34 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class HomePageMainActivity : AppCompatActivity(), HomePageRecyclerViewInterface{
+    val homePagePlantModel_List = ArrayList<HomePagePlantModel>();
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home_page_activity_main)
 
         val recyclerViewInterface1 = this
+
+
+        val searchView = findViewById<SearchView>(R.id.searchView)
+        searchView.clearFocus()
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filterList(newText);
+                return true
+            }
+        })
         val recyclerview = findViewById<RecyclerView>(R.id.card_recycleview)
+        recyclerview.adapter = HomePageRecyclerViewAdapter(
+            this,
+            applicationContext,
+            homePagePlantModel_List
+        )
 
-        val homePagePlantModel_List = ArrayList<HomePagePlantModel>();
-
-
-        recyclerview.adapter =
-            HomePageRecyclerViewAdapter(
-                this,
-                applicationContext,
-                homePagePlantModel_List
-            )
 
         GlobalScope.launch {
             val allPlants = getAllPlants()
@@ -70,6 +84,35 @@ class HomePageMainActivity : AppCompatActivity(), HomePageRecyclerViewInterface{
         btn_myplant.setOnClickListener {
             //val intent = Intent(this, MyActivity::class.java)
             //startActivity(intent)
+        }
+    }
+
+    private fun filterList(text: String?) {
+        val filteredList: ArrayList<HomePagePlantModel> = ArrayList()
+        var compare_text = ""
+        if (text == null){
+
+        }else {
+            compare_text = text
+
+            for (model in homePagePlantModel_List) {
+                if (model.plant_name.lowercase().contains(compare_text.lowercase())) {
+                    filteredList.add(model)
+                }
+            }
+
+            if (filteredList.isEmpty()){
+                if(compare_text!="") {
+                    Toast.makeText(this, "No plant found", Toast.LENGTH_SHORT).show()
+                }
+            }else{
+                val recyclerview = findViewById<RecyclerView>(R.id.card_recycleview)
+                recyclerview.adapter = HomePageRecyclerViewAdapter(
+                    this,
+                    applicationContext,
+                    filteredList
+                )
+            }
         }
     }
 

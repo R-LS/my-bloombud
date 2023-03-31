@@ -25,6 +25,11 @@ public class HomePageRecyclerViewAdapter extends RecyclerView.Adapter<HomePagePl
 
     private List<HomePagePlantModel> homePagePlantModel_List;
 
+    public void setFilteredList(List<HomePagePlantModel> filteredList){
+        this.homePagePlantModel_List = filteredList;
+        notifyDataSetChanged();
+    }
+
     public HomePageRecyclerViewAdapter(HomePageRecyclerViewInterface recyclerViewInterface, Context context,List<HomePagePlantModel> homePagePlantModel_List) {
         this.recyclerViewInterface = recyclerViewInterface;
         this.context = context;
@@ -39,7 +44,7 @@ public class HomePageRecyclerViewAdapter extends RecyclerView.Adapter<HomePagePl
 
     @Override
     public void onBindViewHolder(@NonNull HomePagePlantsViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        Log.d("A",homePagePlantModel_List.get(position).getPlant_name());
+
         holder.flower_name_tv.setText((homePagePlantModel_List.get(position).getPlant_name()));
         holder.flower_detail_tv.setText((homePagePlantModel_List.get(position).getSecondary_text()));
         holder.flower_supporting_text_tv.setText((homePagePlantModel_List.get(position).getSupporting_text()));
