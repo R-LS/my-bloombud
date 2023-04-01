@@ -12,6 +12,31 @@
         android:orientation="vertical"
         android:gravity="center"
         android:layout_marginHorizontal="50dp">
+        <ImageView
+            android:id="@+id/plantImageView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="16dp"
+            android:src="@mipmap/ic_launcher" />
+
+        <Button
+            android:id="@+id/btnTakePhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:text="Take Photo"
+            />
+
+        <Button
+            android:id="@+id/btnSelectPhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="Select Photo"
+            />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -26,19 +51,29 @@
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:background="@color/material_dynamic_neutral90"
             android:layout_marginBottom="20dp"
-            android:hint="Plant Species">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/plantSpecies"
-                android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingVertical="20sp"
+                android:paddingHorizontal="15sp"
+                android:text="Plant Species:"
+                android:textSize="16sp"
                 />
+            <Spinner
+                android:id="@+id/dropdown"
+                android:background="@color/material_dynamic_neutral90"
+                android:paddingVertical="20sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
 
-        </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
             android:layout_marginBottom="20dp"
             android:layout_width="match_parent"
@@ -56,7 +91,7 @@
 
         <Button android:id="@+id/submit"
             android:onClick="onClickCreateNew"
-            android:layout_width="270dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Add Plant"/>
 

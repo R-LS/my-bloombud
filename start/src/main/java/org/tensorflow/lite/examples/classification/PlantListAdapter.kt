@@ -2,14 +2,16 @@ package org.tensorflow.lite.examples.classification
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
+import android.widget.ImageView
 
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.io.File
 
 class PlantListAdapter(private val context: Context, courseModelArrayList: ArrayList<PlantModel>) :
     RecyclerView.Adapter<PlantListAdapter.ViewHolder>() {
@@ -28,10 +30,12 @@ class PlantListAdapter(private val context: Context, courseModelArrayList: Array
         holder.plantNameTV.setText(model.getPlantName())
         holder.plantSpeciesTV.setText(model.getPlantSpecies())
         holder.plantSiteTV.setText(model.getPlantSite())
-        //holder.courseIV.setImageResource(model.getPlantName())
+        val file = File(context.filesDir, "${model.getPlantName()}.jpg")
+        val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+        holder.plantImageIV.setImageBitmap(bitmap)
         holder.editButton.setOnClickListener(){
-            val myIntent = Intent(holder.itemView.context, NewBloomBudActivity::class.java)
-            myIntent.putExtra("plantName",holder.plantNameTV.text.toString())
+            val myIntent = Intent(holder.itemView.context, EditBloomBudActivity::class.java)
+            myIntent.putExtra("plantName",model.getPlantName())
             holder.itemView.context.startActivity(myIntent)
         }
     }
@@ -43,13 +47,13 @@ class PlantListAdapter(private val context: Context, courseModelArrayList: Array
 
     // View holder class for initializing of your views such as TextView and Imageview.
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        //val courseIV: ImageView
+        val plantImageIV: ImageView
         val plantNameTV: TextView
         val plantSpeciesTV: TextView
         val plantSiteTV: TextView
         val editButton: Button
         init {
-            //courseIV = itemView.findViewById(R.id.plantNameTV)
+            plantImageIV = itemView.findViewById(R.id.plantImageIV)
             plantNameTV = itemView.findViewById(R.id.plantNameTV)
             plantSpeciesTV = itemView.findViewById(R.id.plantSpeciesTV)
             plantSiteTV = itemView.findViewById(R.id.plantSiteTV)

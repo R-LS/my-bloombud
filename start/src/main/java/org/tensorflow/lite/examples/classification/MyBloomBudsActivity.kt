@@ -9,37 +9,41 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.util.*
 
 class MyBloomBudsActivity : AppCompatActivity() {
     private var plantList = ArrayList<String>()
-    private var plantName = ""
-    private var plantSite = ""
-    private var plantSpecies = ""
+    private var courseModelArrayList: ArrayList<PlantModel> = ArrayList<PlantModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_my_bloom_buds)
-                if(isFilePresent("bloombuds.txt")){
-            val scanner1 = Scanner(openFileInput("bloombuds.txt"))
-            readFile(scanner1)
-
-        }
-//        val myAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,plantList)
-//        val plantLv = findViewById<ListView>(R.id.plantListView)
-//        plantLv.adapter = myAdapter
         val plantRV = findViewById<RecyclerView>(R.id.plantListRV)
-        val courseModelArrayList: ArrayList<PlantModel> = ArrayList<PlantModel>()
-        for (plant in plantList){
-            if(isFilePresent("$plant.json")){
-                readJSON(plant)
-                Log.d("readJson,","$plantName,$plantSpecies,$plantSite")
-                courseModelArrayList.add(PlantModel(plantName, plantSpecies, plantSite))
-            }
-        }
-        val courseAdapter = PlantListAdapter(this, courseModelArrayList)
+        Log.d("bloombud","hit onCreate ")
 
+        Log.d("bloombud isFilePresent",isFilePresent("bloombuds.json").toString())
+            if(isFilePresent("bloombuds.json")){
+                //readJSON(plant)
+                val path = filesDir.toString() + "/bloombuds.json"
+                //val jsonString = File(path).readText(Charsets.UTF_8)
+                var file = File(path)
+
+                // Parse the JSON string into a JSONObject
+                val json = file.bufferedReader().use{it.readText()}
+                val jsonArray = JSONArray(json)
+                Log.d("readJson,",jsonArray.toString())
+
+                for (i in 0 until jsonArray.length()) {
+                    val jsonObject = jsonArray.getJSONObject(i)
+                    Log.d("eachJson,",jsonObject.toString())
+                    courseModelArrayList.add(PlantModel(jsonObject.getString("plantName"), jsonObject.getString("plantSpecies"), jsonObject.getString("plantSite")))
+                }
+
+            }
+
+        val courseAdapter = PlantListAdapter(this, courseModelArrayList)
         // below line is for setting a layout manager for our recycler view.
         // here we are creating vertical list so we will provide orientation as vertical
         val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -52,22 +56,34 @@ class MyBloomBudsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        plantList = ArrayList<String>()
-        if(isFilePresent("bloombuds.txt")){
-            val scanner1 = Scanner(openFileInput("bloombuds.txt"))
-            readFile(scanner1)
-        }
+        courseModelArrayList = ArrayList<PlantModel>()
         val plantRV = findViewById<RecyclerView>(R.id.plantListRV)
-        val courseModelArrayList: ArrayList<PlantModel> = ArrayList<PlantModel>()
-        for (plant in plantList){
-            if(isFilePresent("$plant.json")){
-                readJSON(plant)
-                Log.d("readJson,","$plantName,$plantSpecies,$plantSite")
-                courseModelArrayList.add(PlantModel(plantName, plantSpecies, plantSite))
-            }
-        }
-        val courseAdapter = PlantListAdapter(this, courseModelArrayList)
+        Log.d("bloombud","hit onCreate ")
 
+        Log.d("bloombud isFilePresent",isFilePresent("bloombuds.json").toString())
+        if(isFilePresent("bloombuds.json")){
+            //readJSON(plant)
+            val path = filesDir.toString() + "/bloombuds.json"
+            //val jsonString = File(path).readText(Charsets.UTF_8)
+            var file = File(path)
+
+
+            // Parse the JSON string into a JSONObject
+            val json = file.bufferedReader().use{it.readText()}
+            val jsonArray = JSONArray(json)
+            Log.d("readJson,",jsonArray.toString())
+
+
+            for (i in 0 until jsonArray.length()) {
+                val jsonObject = jsonArray.getJSONObject(i)
+                Log.d("eachJson,",jsonObject.toString())
+                courseModelArrayList.add(PlantModel(jsonObject.getString("plantName"), jsonObject.getString("plantSpecies"), jsonObject.getString("plantSite")))
+            }
+
+        }
+
+
+        val courseAdapter = PlantListAdapter(this, courseModelArrayList)
         // below line is for setting a layout manager for our recycler view.
         // here we are creating vertical list so we will provide orientation as vertical
         val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -92,10 +108,19 @@ class MyBloomBudsActivity : AppCompatActivity() {
         // Parse the JSON string into a JSONObject
         val jsonObject = JSONObject(jsonString)
 
+        for (k in jsonObject.keys()){
+            var plantRecord = jsonObject.getJSONObject(k)
+            var plantName = plantRecord.getString("plantName")
+            var plantSpecies = plantRecord.getString("plantSpecies")
+            var plantSite = plantRecord.getString("plantSite")
+            //courseModelArrayList.add(PlantModel(plantName, plantSpecies, plantSite))
+
+        }
+
         // Access the values in the JSONObject
-        plantName = jsonObject.getString("plantName")
-        plantSpecies = jsonObject.getString("plantSpecies")
-        plantSite = jsonObject.getString("plantSite")
+//        plantName = jsonObject.getString("plantName")
+//        plantSpecies = jsonObject.getString("plantSpecies")
+//        plantSite = jsonObject.getString("plantSite")
     }
 
     private fun isFilePresent(fileName: String): Boolean {

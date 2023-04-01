@@ -9,6 +9,7 @@
     android:gravity="center"
     android:layout_marginHorizontal="50dp">
 
+
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,19 +23,27 @@
             />
 
     </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:background="@color/material_dynamic_neutral90"
         android:layout_marginBottom="20dp"
-        android:hint="Plant Species">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/plantSpecies"
-            android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingVertical="20sp"
+            android:paddingHorizontal="15sp"
+            android:text="Plant Species:"
+            android:textSize="16sp"
             />
-
-    </com.google.android.material.textfield.TextInputLayout>
+        <Spinner
+            android:id="@+id/dropdown"
+            android:background="@color/material_dynamic_neutral90"
+            android:paddingVertical="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
     <com.google.android.material.textfield.TextInputLayout
         android:layout_marginBottom="20dp"
         android:layout_width="match_parent"
@@ -52,7 +61,7 @@
 
     <Button android:id="@+id/makeEdit"
         android:onClick="onClickEdit"
-        android:layout_width="270dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Add Plant"/>
 

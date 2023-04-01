@@ -1,5 +1,6 @@
 package org.tensorflow.lite.examples.classification
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -74,16 +75,16 @@ class HomePageMainActivity : AppCompatActivity(), HomePageRecyclerViewInterface{
         val btn_scanplant = findViewById<Button>(R.id.btn_scanplant)
 
         btn_scanplant.setOnClickListener {
-            //val intent = Intent(this, MyActivity::class.java)
-            //startActivity(intent)
+            val intent = Intent(this, IdentifierActivity::class.java)
+            startActivity(intent)
         }
 
         //Add Intent here -- My Plant
         val btn_myplant = findViewById<Button>(R.id.btn_myplant)
 
         btn_myplant.setOnClickListener {
-            //val intent = Intent(this, MyActivity::class.java)
-            //startActivity(intent)
+            val intent = Intent(this, MyBloomBudsActivity::class.java)
+            startActivity(intent)
         }
     }
 
