@@ -65,4 +65,10 @@
         android:layout_height="wrap_content"
         android:text="Add Plant"/>
 
+    <Button android:id="@+id/deletePlant"
+        android:onClick="onClickDelete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Remove Plant"/>
+
 </LinearLayout>

@@ -79,6 +79,28 @@ class EditBloomBudActivity : AppCompatActivity() {
         finish()
         Toast.makeText(this,"Successfully edited $newPlantName the $selectedPlantSpecies!", Toast.LENGTH_SHORT).show()
     }
+
+    fun onClickDelete(v:View){
+        //Modify the json file
+        val path = filesDir.toString() + "/" + "bloombuds.json"
+        var file = File(path)
+
+        // Parse the JSON string into a JSONObject
+        val json = file.bufferedReader().use{it.readText()}
+        val jsonArray = JSONArray(json)
+        jsonArray.remove(plantID)
+        val outputStream = FileOutputStream(path)
+        val printStream = PrintStream(outputStream)
+        printStream.println(jsonArray) // write data to the file, which will overwrite the existing file contents
+        printStream.close()
+        val imageToDelete = File(filesDir.toString()+"$plantName.jpg")
+        if(imageToDelete.exists()){
+            imageToDelete.delete()
+        }
+        finish()
+        Toast.makeText(this, "Successfully deleted $plantName the $plantSpecies.", Toast.LENGTH_SHORT).show()
+
+    }
     private fun modifyJSON(newPlantName:String, newPlantSite:String, newPlantSpecies:String){
         // Create a JSON object
         val jsonObject = JSONObject()

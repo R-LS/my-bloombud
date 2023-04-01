@@ -23,18 +23,16 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Matrix
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.util.Size
 import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.Camera
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageAnalysis
-import androidx.camera.core.ImageProxy
-import androidx.camera.core.Preview
+import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
@@ -47,6 +45,11 @@ import org.tensorflow.lite.examples.classification.util.YuvToRgbConverter
 import org.tensorflow.lite.examples.classification.viewmodel.Recognition
 import org.tensorflow.lite.examples.classification.viewmodel.RecognitionListViewModel
 import org.tensorflow.lite.support.image.TensorImage
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.Executors
 
 // Constants
@@ -121,11 +124,7 @@ class IdentifierActivity : AppCompatActivity() {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-    fun onClickBloomBuds(v: View){
-        val myIntent = Intent(this, MyBloomBudsActivity::class.java)
-        startActivity(myIntent)
 
-    }
     fun onCaptureResult(v:View){
         Log.d("recognition clicked","oncapture result clicked")
         Log.d("recognition listener","${recogViewModel.recognitionList.value.toString()}")
@@ -174,6 +173,18 @@ class IdentifierActivity : AppCompatActivity() {
      * 3. Attach both to the lifecycle of this activity
      * 4. Pipe the output of the preview object to the PreviewView on the screen
      */
+
+    private fun getOutputFile(): File {
+        // Create a new file in the external storage directory
+        val mediaDir = externalMediaDirs.firstOrNull()?.let {
+            File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
+        }
+
+        return File(
+            mediaDir,
+            "IMG_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())}.jpg"
+        )
+    }
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
@@ -201,6 +212,10 @@ class IdentifierActivity : AppCompatActivity() {
                     })
                 }
 
+            // Add image capture use case
+            val imageCapture = ImageCapture.Builder()
+                .build()
+
             // Select camera, back is the default. If it is not available, choose front camera
             val cameraSelector =
                 if (cameraProvider.hasCamera(CameraSelector.DEFAULT_BACK_CAMERA))
@@ -213,11 +228,52 @@ class IdentifierActivity : AppCompatActivity() {
                 // Bind use cases to camera - try to bind everything at once and CameraX will find
                 // the best combination.
                 camera = cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview, imageAnalyzer
+                    this, cameraSelector, preview, imageAnalyzer, imageCapture
                 )
 
                 // Attach the preview to preview view, aka View Finder
                 preview.setSurfaceProvider(viewFinder.surfaceProvider)
+
+                //set-up photo-taking function
+                val captureButton = findViewById<Button>(R.id.captureBtn)
+                captureButton.setOnClickListener {
+                    val photoFile = File(externalMediaDirs.first(), "${System.currentTimeMillis()}.jpg")
+
+                    val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
+
+                    imageCapture.takePicture(
+                        outputOptions, cameraExecutor, object : ImageCapture.OnImageSavedCallback {
+                            override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                                // Image saved successfully
+                                val savedUri = outputFileResults.savedUri ?: Uri.fromFile(photoFile)
+                                Log.d(TAG, "Photo capture succeeded: $savedUri")
+
+                                // Save the image to device storage
+                                val inputStream = FileInputStream(photoFile)
+                                val file = getOutputFile()
+                                val outputStream = FileOutputStream(file)
+
+                                inputStream.copyTo(outputStream)
+
+                                inputStream.close()
+                                outputStream.close()
+
+                                // Pass the image data as an extra to the intent that launches the new activity
+                                val intent = Intent(this@IdentifierActivity, PlantSpeciesResult::class.java)
+                                intent.putExtra("image_path", file.absolutePath)
+                                val resultList = recogViewModel.recognitionList.value.toString()
+                                val pieces = resultList.substring(1,resultList.length-1).split(", ")
+                                intent.putExtra("species1",pieces[0])
+                                intent.putExtra("species2",pieces[1])
+                                intent.putExtra("species3",pieces[2])
+                                startActivity(intent)
+                            }
+
+                            override fun onError(exception: ImageCaptureException) {
+                                Log.e(TAG, "Photo capture failed: ${exception.message}", exception)
+                            }
+                        }
+                    )}
             } catch (exc: Exception) {
                 Log.e(TAG, "Use case binding failed", exc)
             }

@@ -21,7 +21,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        tools:context=".IdentifierActivity">
 
         <androidx.camera.view.PreviewView
             android:id="@+id/viewFinder"
@@ -31,34 +31,26 @@
 
         </androidx.camera.view.PreviewView>
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_gravity="top"
-            android:background="#8000">
-                <Button
-                    android:id="@+id/bloombudsBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="buds"
-                    android:onClick="onClickBloomBuds"
-                    />
-                <Button
-                    android:id="@+id/captureBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Capture"
-                    android:onClick="onCaptureResult"
-                    />
-
-        </androidx.appcompat.widget.Toolbar>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recognitionResults"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:orientation="vertical"
-            app:layoutManager="LinearLayoutManager"  />
+            android:layout_width="match_parent">
+                <Button
+                    android:id="@+id/captureBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Capture"
+                    />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recognitionResults"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:orientation="vertical"
+                    app:layoutManager="LinearLayoutManager"  />
+
+        </LinearLayout>
+
 </merge>

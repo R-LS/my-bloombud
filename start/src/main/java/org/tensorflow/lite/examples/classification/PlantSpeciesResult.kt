@@ -1,9 +1,13 @@
 package org.tensorflow.lite.examples.classification
 
 import android.content.Intent
+import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 
 class PlantSpeciesResult : AppCompatActivity() {
@@ -23,6 +27,27 @@ class PlantSpeciesResult : AppCompatActivity() {
         plant2.text = it.getStringExtra("species2")
         plant3.text = it.getStringExtra("species3")
 
+        // Retrieve the file path from the intent
+        val imagePath = intent.getStringExtra("image_path")
+
+        // Load the image from the file path into an ImageView
+        val imageView = findViewById<ImageView>(R.id.plantImageView)
+        imageView.setImageURI(Uri.parse(imagePath))
+
+    }
+
+    fun onClickBloomBuds(v: View){
+        val myIntent = Intent(this, MyBloomBudsActivity::class.java)
+        startActivity(myIntent)
+
+    }
+    fun onClickReturn(v: View){
+        finish()
+    }
+
+    fun backToHome(v: View){
+        val myIntent = Intent(this, HomePageMainActivity::class.java)
+        startActivity(myIntent)
     }
 
 }
