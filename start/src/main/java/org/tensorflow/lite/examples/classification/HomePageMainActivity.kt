@@ -121,9 +121,9 @@ class HomePageMainActivity : AppCompatActivity(), HomePageRecyclerViewInterface{
     override fun onItemClick(position: Int,name : String) {
 
         //Add Intent here -- Plant Care
-        //val intent = Intent(this, MyActivity::class.java)
-        //intent.putExtra("flower_name",name)
-        //startActivity(intent)
+        val intent = Intent(this, PlantCare::class.java)
+        intent.putExtra("plantName",name)
+        startActivity(intent)
 
     }
 
