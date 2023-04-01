@@ -13,6 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+buildscript {
+    ext.kotlin_version = '1.6.21'
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+
+        // 4.1.0-alpha10 or above and Android Studio 4.1 Canary 10 or above is required for
+        // TensorFlow Lite / Machine Learning (ML) binding
+        classpath 'com.android.tools.build:gradle:7.4.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+    }
+}
+
 
 plugins {
     id 'com.android.application'
@@ -60,6 +76,19 @@ android {
 
 }
 
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+tasks.register("prepareKotlinBuildScriptModel"){}
+
+task wrapper(type: Wrapper){
+    gradleVersion = '7.2'
+}
+
 dependencies {
 
     // Default imports for Kotlin and Jetpack
@@ -73,6 +102,7 @@ dependencies {
     implementation 'org.tensorflow:tensorflow-lite-support:0.1.0'
     implementation 'org.tensorflow:tensorflow-lite-metadata:0.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
 
     // Import for CameraX
@@ -92,3 +122,4 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
+
