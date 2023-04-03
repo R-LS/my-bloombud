@@ -1,30 +1,26 @@
 package org.tensorflow.lite.examples.classification
 
 import android.app.ActivityManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.net.URL
+//import com.example.plantvisualiser.PlantVisualiser
+
 
 var plantInfo = ArrayList<String>()
 
@@ -94,7 +90,10 @@ class PlantCare : AppCompatActivity() {
             Log.e("AR", "Sceneform requires OpenGL ES 3.0 later")
             Toast.makeText(applicationContext, "Sceneform requires OpenGL ES 3.0 or later", Toast.LENGTH_LONG).show()
         } else {
-            val myIntent = Intent(this, PlantVisualiser::class.java)
+            val myIntent = Intent().setClassName(
+                "com.example.plantvisualiser",
+                "com.example.plantvisualiser.PlantVisualiser"
+            )
             myIntent.putExtra("plantFile", plantFile)
             startActivity(myIntent)
         }

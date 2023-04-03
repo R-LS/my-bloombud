@@ -39,7 +39,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
 
     defaultConfig {
         applicationId "org.tensorflow.lite.examples.classification"
@@ -103,12 +103,13 @@ dependencies {
     implementation 'org.tensorflow:tensorflow-lite-metadata:0.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    implementation 'com.google.ar.sceneform.ux:sceneform-ux:1.15.0'
+    //implementation project(':plantvisualiser')
+    /*implementation 'com.google.ar.sceneform.ux:sceneform-ux:1.15.0'
     implementation 'com.google.ar.sceneform:core:1.15.0'
     implementation 'com.google.ar.sceneform:assets:1.15.0'
     implementation 'com.google.ar.sceneform:animation:1.15.0'
     implementation 'com.google.ar.sceneform:rendering:1.15.0'
-    implementation 'com.google.ar:core:1.28.0'
+    implementation 'com.google.ar:core:1.28.0'*/
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
     implementation 'com.google.code.gson:gson:2.8.6'
 
@@ -131,6 +132,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
 
-configurations.all {
+/*configurations.all {
     exclude group: 'com.google.flatbuffers', module: 'flatbuffers-java'
-}
+}*/

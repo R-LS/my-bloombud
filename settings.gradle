@@ -16,3 +16,4 @@
 
 include ':finish', ':start'
 rootProject.name = "TFL Classify"
+include ':plantvisualiser'
