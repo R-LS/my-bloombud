@@ -63,12 +63,14 @@
         android:onClick="onClickEdit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/dark_green"
         android:text="Add Plant"/>
 
     <Button android:id="@+id/deletePlant"
         android:onClick="onClickDelete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/brown"
         android:text="Remove Plant"/>
 
 </LinearLayout>

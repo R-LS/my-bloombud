@@ -67,18 +67,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="My BloomBuds"
+            android:backgroundTint="@color/dark_green"
             android:onClick="onClickBloomBuds"
             />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Scan Another Plant"
+            android:backgroundTint="@color/brown"
             android:onClick="onClickReturn"
             />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Back to Home"
+            android:backgroundTint="@color/dark_green"
             android:onClick="backToHome"
             />
     </LinearLayout>

@@ -5,22 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="40dp"
     tools:context=".MyBloomBudsActivity">
-    <TextView
-        android:id="@+id/myBloomBuds"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="My BloomBuds"
-        android:textSize="30dp"
-        />
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/myBloomBuds"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="My BloomBuds"
+            android:textSize="30sp"
+            />
+        <Button
+            android:id="@+id/addNewPlant"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="+"
+            android:backgroundTint="@color/dark_green"
+            android:onClick="onAddNewPlant"/>
 
-    <Button
-        android:id="@+id/addNewPlant"
-        android:layout_width="50sp"
-        android:layout_height="wrap_content"
-        android:text="+"
-        android:layout_gravity="right"
-        android:onClick="onAddNewPlant"/>
+    </LinearLayout>
+
 
 
     <androidx.recyclerview.widget.RecyclerView
