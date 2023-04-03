@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="bloombudMain" type="CompoundRunConfigurationType">
+    <toRun name="01_bloombud_visualiser" type="AndroidRunConfigurationType" />
+    <toRun name="02_bloombud_main" type="AndroidRunConfigurationType" />
+    <method v="2" />
+  </configuration>
+</component>
