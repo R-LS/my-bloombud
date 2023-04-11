@@ -1,7 +1,7 @@
 # BloomBud
 
 
-## Pre-requisites
+## Requirements
 
 For device:
 - Android N or later
@@ -10,7 +10,10 @@ For device:
 
 ## Getting Started
 
-Visit the Google codelabs site to follow along the guided steps.
+1. In Android Studio, under Run Configurations, choose "bloombudMain"
+![image](https://user-images.githubusercontent.com/47132351/231118391-eb20514d-0ad4-499d-b93e-742d9ba33543.png)
+
+2. Ensure that the device you are running the application on meets the requirements stated above
 
 ## Support
 
