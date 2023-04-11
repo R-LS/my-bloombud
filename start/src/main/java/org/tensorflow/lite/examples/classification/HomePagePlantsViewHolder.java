@@ -32,11 +32,13 @@ public class HomePagePlantsViewHolder extends RecyclerView.ViewHolder{
             @Override
             public void onClick(View view) {
                 if (recyclerViewInterface != null){
+                    //get position index of item in the dynamic list
                     int pos = getBindingAdapterPosition();
-
+                    //get the plant with selected index
                     String selectedPlant = homePagePlantModel_List.get(pos).getPlant_name();
 
                     if(pos != RecyclerView.NO_POSITION){
+                        //on click and pass in the position and selected plant object
                         recyclerViewInterface.onItemClick(pos,selectedPlant);
                     }
                 }

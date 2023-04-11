@@ -26,19 +26,22 @@ class HomePageMainActivity : AppCompatActivity(), HomePageRecyclerViewInterface{
 
         val recyclerViewInterface1 = this
 
-
+        //Search bar initialization
         val searchView = findViewById<SearchView>(R.id.searchView)
+        //Clear default focus(keyboard) on creation of the application
         searchView.clearFocus()
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
+                //do nothing
                 return false
             }
-
+            // if the search text changed, return the filteredList
             override fun onQueryTextChange(newText: String?): Boolean {
                 filterList(newText);
                 return true
             }
         })
+        //Dynamic list initialization
         val recyclerview = findViewById<RecyclerView>(R.id.card_recycleview)
         recyclerview.adapter = HomePageRecyclerViewAdapter(
             this,
@@ -46,18 +49,17 @@ class HomePageMainActivity : AppCompatActivity(), HomePageRecyclerViewInterface{
             homePagePlantModel_List
         )
 
-
+        //Do HTTP get request
         GlobalScope.launch {
             val allPlants = getAllPlants()
             val plantsArray = JSONArray(allPlants)
 
+            //loop every element return in the json list and put them in model(list)
             for (i in 0 until plantsArray.length()) {
                 val plant = plantsArray.getJSONObject(i)
                 val model = HomePagePlantModel(plant.get("name").toString(),plant.get("imageUrl").toString(),plant.get("description").toString(),plant.get("supportingText").toString())
                 homePagePlantModel_List.add(model)
                 withContext(Dispatchers.Main) {
-                    //val imageView: ImageView = findViewById(R.id.plantImage)
-                    //imageView.setImageBitmap(bitmap)
                     recyclerview.layoutManager = LinearLayoutManager(applicationContext)
                     recyclerview.adapter =
                         HomePageRecyclerViewAdapter(
@@ -71,17 +73,16 @@ class HomePageMainActivity : AppCompatActivity(), HomePageRecyclerViewInterface{
 
         }
 
-        //Add Intent here -- Scan Plant
         val btn_scanplant = findViewById<Button>(R.id.btn_scanplant)
-
+        //Intent to scanplant activity
         btn_scanplant.setOnClickListener {
             val intent = Intent(this, IdentifierActivity::class.java)
             startActivity(intent)
         }
 
-        //Add Intent here -- My Plant
-        val btn_myplant = findViewById<Button>(R.id.btn_myplant)
 
+        val btn_myplant = findViewById<Button>(R.id.btn_myplant)
+        //Intent to myplant activity
         btn_myplant.setOnClickListener {
             val intent = Intent(this, MyBloomBudsActivity::class.java)
             startActivity(intent)
@@ -90,18 +91,21 @@ class HomePageMainActivity : AppCompatActivity(), HomePageRecyclerViewInterface{
 
     private fun filterList(text: String?) {
         val filteredList: ArrayList<HomePagePlantModel> = ArrayList()
+        //text used to compare and search in the existing plant list
         var compare_text = ""
+        //if text is null nothing will happened(return to default state)
         if (text == null){
 
         }else {
             compare_text = text
 
+            //if the current list contains plant name contains search text, add them to filteredList
             for (model in homePagePlantModel_List) {
                 if (model.plant_name.lowercase().contains(compare_text.lowercase())) {
                     filteredList.add(model)
                 }
             }
-
+            //if filteredList is empty, print error message toastbox
             if (filteredList.isEmpty()){
                 if(compare_text!="") {
                     Toast.makeText(this, "No plant found", Toast.LENGTH_SHORT).show()
@@ -120,7 +124,7 @@ class HomePageMainActivity : AppCompatActivity(), HomePageRecyclerViewInterface{
 
     override fun onItemClick(position: Int,name : String) {
 
-        //Add Intent here -- Plant Care
+        //Intent to plant care activity with plant name clicked/selected
         val intent = Intent(this, PlantCare::class.java)
         intent.putExtra("plantName",name)
         startActivity(intent)
@@ -128,7 +132,7 @@ class HomePageMainActivity : AppCompatActivity(), HomePageRecyclerViewInterface{
     }
 
 }
-
+//HTTP get request to get all plants from api
 suspend fun getAllPlants(): String {
     var return_respone = ""
     withContext(Dispatchers.IO) {
@@ -142,7 +146,7 @@ suspend fun getAllPlants(): String {
         val responseCode = httpURLConnection.responseCode
         if (responseCode == HttpURLConnection.HTTP_OK) {
             val response = httpURLConnection.inputStream.bufferedReader()
-                .use { it.readText() }  // defaults to UTF-8
+                .use { it.readText() }  // de faults to UTF-8
             return_respone = response
         } else {
             Log.e("HTTPURLCONNECTION_ERROR", responseCode.toString())
