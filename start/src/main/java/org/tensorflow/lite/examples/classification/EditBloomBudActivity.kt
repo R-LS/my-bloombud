@@ -25,13 +25,16 @@ class EditBloomBudActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_bloom_bud)
+
+        //retrieve values from intent
         val it = intent
         plantName = it.getStringExtra("plantName").toString()
         readJSON(plantName)
         findViewById<TextInputEditText>(R.id.plantName).setText(plantName)
         findViewById<TextInputEditText>(R.id.plantSite).setText(plantSite)
-        val mySpinner = findViewById<Spinner>(R.id.dropdown)
 
+        //load values into spinner
+        val mySpinner = findViewById<Spinner>(R.id.dropdown)
         val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, myPlantSpeciesList)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mySpinner.adapter = spinnerAdapter
@@ -71,9 +74,12 @@ class EditBloomBudActivity : AppCompatActivity() {
 
     }
     fun onClickEdit(v: View){
+        //retrieve values
         val newPlantName = findViewById<TextInputEditText>(R.id.plantName).text.toString()
         val newPlantSite = findViewById<TextInputEditText>(R.id.plantSite).text.toString()
+        //call modify function
         modifyJSON(newPlantName,newPlantSite,selectedPlantSpecies)
+        //navigate back to
         val intent = Intent()
         setResult(RESULT_OK, intent)
         finish()
@@ -96,11 +102,17 @@ class EditBloomBudActivity : AppCompatActivity() {
         val imageToDelete = File(filesDir.toString()+"$plantName.jpg")
         if(imageToDelete.exists()){
             imageToDelete.delete()
+            Toast.makeText(this, "Successfully deleted $plantName the $plantSpecies.", Toast.LENGTH_SHORT).show()
         }
         finish()
-        Toast.makeText(this, "Successfully deleted $plantName the $plantSpecies.", Toast.LENGTH_SHORT).show()
+
 
     }
+
+    fun onClickReturn(v:View){
+        finish()
+    }
+
     private fun modifyJSON(newPlantName:String, newPlantSite:String, newPlantSpecies:String){
         // Create a JSON object
         val jsonObject = JSONObject()

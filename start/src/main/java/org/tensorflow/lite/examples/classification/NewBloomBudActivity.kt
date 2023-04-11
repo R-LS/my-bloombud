@@ -40,17 +40,19 @@ class NewBloomBudActivity : AppCompatActivity() {
 
         plantImageView = findViewById<ImageView>(R.id.plantImageView)
 
+
+        //set onclick listeners for buttons
         val btnTakePhoto = findViewById<Button>(R.id.btnTakePhoto)
         btnTakePhoto.setOnClickListener { takePhoto() }
-
         val btnSelectPhoto = findViewById<Button>(R.id.btnSelectPhoto)
         btnSelectPhoto.setOnClickListener { selectPhoto() }
-        if (isFilePresent("bloombuds.json")){
+
+        //load plants if bloombuds file exists
+        if (isFilePresent("bloombuds.json",this.filesDir)){
             loadPlantList()
         }
 
         val mySpinner = findViewById<Spinner>(R.id.dropdown)
-
         val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, myPlantSpeciesList)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         mySpinner.adapter = spinnerAdapter
@@ -185,9 +187,10 @@ class NewBloomBudActivity : AppCompatActivity() {
 
 
     fun onClickCreateNew(v: View){
+        //get inputs
         val plantName = findViewById<TextInputEditText>(R.id.plantName).text.toString()
         val plantSite = findViewById<TextInputEditText>(R.id.plantSite).text.toString()
-        //val plantSpecies = findViewById<TextInputEditText>(R.id.plantSpecies).text.toString()
+        //condition checks
         if(plantList.contains(plantName)){
             Toast.makeText(this,"A plant by this name already exists!", Toast.LENGTH_SHORT).show()
         }
@@ -198,6 +201,7 @@ class NewBloomBudActivity : AppCompatActivity() {
             modifyJSON(plantName,plantSite,selectedPlantSpecies)
             savePlantImage(plantName)
             //editPlantList(plantName)
+            //navigate back to my bloombud page
             val intent = Intent()
             setResult(RESULT_OK, intent)
             finish()
@@ -208,6 +212,7 @@ class NewBloomBudActivity : AppCompatActivity() {
     }
 
     private fun loadPlantList(){
+        //load list of plants from bloombuds.json file
         val fileName = filesDir.toString() + "/bloombuds.json"
         var file = File(fileName)
 
@@ -221,17 +226,11 @@ class NewBloomBudActivity : AppCompatActivity() {
 
     }
 
-    private fun isFilePresent(fileName: String): Boolean {
-        val path = filesDir.toString() + "/" + fileName
-        val file = File(path)
-        Log.d("filething", path)
-        Log.d("filething", file.exists().toString())
-        return file.exists()
-    }
 
 
 
     private fun modifyJSON(plantName:String, plantSite:String, plantSpecies:String){
+        //prepare json array and json object to insert new plant entry
         //var jsonObject = JSONObject()
         var jsonArray = JSONArray()
         val fileName = filesDir.toString() + "/bloombuds.json"

@@ -6,6 +6,7 @@ import com.google.gson.JsonParser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import java.io.File
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
@@ -181,4 +182,12 @@ suspend fun getPlantInfo(plantId: String): ArrayList<String> {
     }
 
     return pInfo
+}
+
+fun isFilePresent(fileName: String, filesDir: File): Boolean {
+    val path = "$filesDir/$fileName"
+    val file = File(path)
+    Log.d("filething", path)
+    Log.d("filething", file.exists().toString())
+    return file.exists()
 }

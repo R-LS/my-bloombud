@@ -125,20 +125,6 @@ class IdentifierActivity : AppCompatActivity() {
     }
 
 
-    fun onCaptureResult(v:View){
-        Log.d("recognition clicked","oncapture result clicked")
-        Log.d("recognition listener","${recogViewModel.recognitionList.value.toString()}")
-        val resultList = recogViewModel.recognitionList.value.toString()
-        val pieces = resultList.substring(1,resultList.length-1).split(", ")
-        Log.d("recognition plant1","${pieces[0]}")
-        val myIntent = Intent(this, PlantSpeciesResult::class.java)
-        myIntent.putExtra("species1",pieces[0])
-        myIntent.putExtra("species2",pieces[1])
-        myIntent.putExtra("species3",pieces[2])
-        startActivity(myIntent)
-
-    }
-
     /**
      * This gets called after the Camera permission pop up is shown.
      */
@@ -258,7 +244,7 @@ class IdentifierActivity : AppCompatActivity() {
                                 inputStream.close()
                                 outputStream.close()
 
-                                // Pass the image data as an extra to the intent that launches the new activity
+                                // Pass the image and species data as an extra to the intent that launches the new activity
                                 val intent = Intent(this@IdentifierActivity, PlantSpeciesResult::class.java)
                                 intent.putExtra("image_path", file.absolutePath)
                                 val resultList = recogViewModel.recognitionList.value.toString()

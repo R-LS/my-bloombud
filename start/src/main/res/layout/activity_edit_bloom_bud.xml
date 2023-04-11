@@ -64,7 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/dark_green"
-        android:text="Add Plant"/>
+        android:text="Confirm Edit"/>
 
     <Button android:id="@+id/deletePlant"
         android:onClick="onClickDelete"
@@ -72,5 +72,11 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/brown"
         android:text="Remove Plant"/>
+    <Button android:id="@+id/goBack"
+        android:onClick="onClickReturn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/brown"
+        android:text="Cancel"/>
 
 </LinearLayout>

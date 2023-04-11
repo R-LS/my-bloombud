@@ -23,8 +23,8 @@ class MyBloomBudsActivity : AppCompatActivity() {
         val plantRV = findViewById<RecyclerView>(R.id.plantListRV)
         Log.d("bloombud","hit onCreate ")
 
-        Log.d("bloombud isFilePresent",isFilePresent("bloombuds.json").toString())
-            if(isFilePresent("bloombuds.json")){
+
+            if(isFilePresent("bloombuds.json",this.filesDir)){
                 //readJSON(plant)
                 val path = filesDir.toString() + "/bloombuds.json"
                 //val jsonString = File(path).readText(Charsets.UTF_8)
@@ -56,12 +56,11 @@ class MyBloomBudsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        courseModelArrayList = ArrayList<PlantModel>()
-        val plantRV = findViewById<RecyclerView>(R.id.plantListRV)
-        Log.d("bloombud","hit onCreate ")
 
-        Log.d("bloombud isFilePresent",isFilePresent("bloombuds.json").toString())
-        if(isFilePresent("bloombuds.json")){
+
+        courseModelArrayList = ArrayList<PlantModel>()
+        //Log.d("bloombud isFilePresent",isFilePresent("bloombuds.json",this.filesDir).toString())
+        if(isFilePresent("bloombuds.json",this.filesDir)){
             //readJSON(plant)
             val path = filesDir.toString() + "/bloombuds.json"
             //val jsonString = File(path).readText(Charsets.UTF_8)
@@ -73,7 +72,7 @@ class MyBloomBudsActivity : AppCompatActivity() {
             val jsonArray = JSONArray(json)
             Log.d("readJson,",jsonArray.toString())
 
-
+            //load items into arraylist
             for (i in 0 until jsonArray.length()) {
                 val jsonObject = jsonArray.getJSONObject(i)
                 Log.d("eachJson,",jsonObject.toString())
@@ -82,10 +81,12 @@ class MyBloomBudsActivity : AppCompatActivity() {
 
         }
 
+        //get recyclerview
+        val plantRV = findViewById<RecyclerView>(R.id.plantListRV)
+        //Log.d("bloombud","hit onCreate ")
 
+        //load arraylist into custom adapter for recyclerview of card views
         val courseAdapter = PlantListAdapter(this, courseModelArrayList)
-        // below line is for setting a layout manager for our recycler view.
-        // here we are creating vertical list so we will provide orientation as vertical
         val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
         // in below two lines we are setting layoutmanager and adapter to our recycler view.
@@ -93,45 +94,16 @@ class MyBloomBudsActivity : AppCompatActivity() {
         plantRV.adapter = courseAdapter
 
     }
-        private fun readFile(scanner: Scanner){
-        while(scanner.hasNextLine()){
-            val line = scanner.nextLine()
-            val pieces = line.split("\t")
-            plantList.add(pieces[0])
-        }
-    }
-    private fun readJSON(fileName:String){
-        // Load the JSON file as a string
-        val path = filesDir.toString() + "/" + fileName+".json"
-        val jsonString = File(path).readText(Charsets.UTF_8)
 
-        // Parse the JSON string into a JSONObject
-        val jsonObject = JSONObject(jsonString)
 
-        for (k in jsonObject.keys()){
-            var plantRecord = jsonObject.getJSONObject(k)
-            var plantName = plantRecord.getString("plantName")
-            var plantSpecies = plantRecord.getString("plantSpecies")
-            var plantSite = plantRecord.getString("plantSite")
-            //courseModelArrayList.add(PlantModel(plantName, plantSpecies, plantSite))
-
-        }
-
-        // Access the values in the JSONObject
-//        plantName = jsonObject.getString("plantName")
-//        plantSpecies = jsonObject.getString("plantSpecies")
-//        plantSite = jsonObject.getString("plantSite")
-    }
-
-    private fun isFilePresent(fileName: String): Boolean {
-        val path = filesDir.toString() + "/" + fileName
-        val file = File(path)
-        Log.d("filething", path)
-        Log.d("filething", file.exists().toString())
-        return file.exists()
-    }
     fun onAddNewPlant(v: View){
+        //start new bloombud activity
         val myIntent = Intent(this, NewBloomBudActivity::class.java)
+        startActivity(myIntent)
+    }
+
+    fun onReturn(v:View){
+        val myIntent = Intent(this, HomePageMainActivity::class.java)
         startActivity(myIntent)
     }
 
