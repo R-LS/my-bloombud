@@ -19,6 +19,7 @@ import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
 
+// initialise variables
 var recommendationInfo = ArrayList<String>()
 var readings = ArrayList<String>()
 
@@ -41,13 +42,12 @@ class PlantRecommendation : AppCompatActivity() {
         val lightRecommendation = findViewById<TextView>(R.id.lightRecommendation)
         loadingBar = findViewById<CardView>(R.id.loading_bar)
 
-        // get from prev activity intent
-        //val plantName = "Rose"
+        // get plant name from previous activity intent
         val it = intent
         val plantName = it.getStringExtra("plantName").toString()
         plantNameTV.text = plantName
 
-
+        // get the image and plant recommendation information, according to the sensor readings, from the BloomBud API
         GlobalScope.launch {
             showLoadingScreen()
             val imageInfo = getImage(plantName)

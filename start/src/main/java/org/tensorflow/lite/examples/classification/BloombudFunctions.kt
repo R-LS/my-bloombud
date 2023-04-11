@@ -10,6 +10,7 @@ import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
 
+// get the sensor readings from thingspeak
 suspend fun getReadings() : ArrayList<String> {
     var sensorReadings = ArrayList<String>()
     withContext(Dispatchers.IO) {
@@ -36,7 +37,7 @@ suspend fun getReadings() : ArrayList<String> {
     }
     return sensorReadings
 }
-
+// get the image of a flower from BloomBud API
 suspend fun getImage(plantName : String) : ArrayList<String> {
     var imagePlantInfo = ArrayList<String>()
     withContext(Dispatchers.IO) {
@@ -68,31 +69,7 @@ suspend fun getImage(plantName : String) : ArrayList<String> {
     return imagePlantInfo
 }
 
-/*suspend fun getImageById(plantId : String) : String {
-    var imageUrl = ""
-    withContext(Dispatchers.IO) {
-        val url = URL("http://my-bloombud-backend-dev-env-env.eba-ui2ndxti.ap-southeast-2.elasticbeanstalk.com/plant/" + plantId)
-        val httpURLConnection = url.openConnection() as HttpURLConnection
-        httpURLConnection.setRequestProperty("Accept", "application/json") // The format of response we want to get from the server
-        httpURLConnection.requestMethod = "GET"
-        httpURLConnection.doInput = true
-        httpURLConnection.doOutput = false
-        // Check if the connection is successful
-        val responseCode = httpURLConnection.responseCode
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            val response = httpURLConnection.inputStream.bufferedReader()
-                .use { it.readText() }  // defaults to UTF-8
-            withContext(Dispatchers.Main) {
-                val jsonObject = JsonParser.parseString(response).asJsonObject
-                imageUrl = jsonObject.get("imageUrl").asString
-            }
-        } else {
-            Log.e("HTTPURLCONNECTION_ERROR", responseCode.toString())
-        }
-    }
-    return imageUrl
-}*/
-
+// get the recommended information from BloomBud API, based on the current readings
 suspend fun getRecommendationInfo(plantName: String, lightCurrent: String, humidityCurrent: String, temperatureCurrent: String): ArrayList<String> {
     var recInfo = ArrayList<String>()
     // Create JSON using JSONObject
@@ -109,8 +86,8 @@ suspend fun getRecommendationInfo(plantName: String, lightCurrent: String, humid
         val url = URL("http://my-bloombud-backend-dev-env-env.eba-ui2ndxti.ap-southeast-2.elasticbeanstalk.com/plant/analysis")
         val httpURLConnection = url.openConnection() as HttpURLConnection
         httpURLConnection.requestMethod = "POST"
-        httpURLConnection.setRequestProperty("Content-Type", "application/json") // The format of the content we're sending to the server
-        httpURLConnection.setRequestProperty("Accept", "application/json") // The format of response we want to get from the server
+        httpURLConnection.setRequestProperty("Content-Type", "application/json")
+        httpURLConnection.setRequestProperty("Accept", "application/json")
         httpURLConnection.doInput = true
         httpURLConnection.doOutput = true
 
@@ -134,20 +111,6 @@ suspend fun getRecommendationInfo(plantName: String, lightCurrent: String, humid
                 val jsonObj = JSONObject(prettyJson)
                 val plantDesc = jsonObj.getJSONObject("plant").getJSONObject("lifecycleInfo").getString("description")
                 recInfo.add(plantDesc)
-                /*val plantLightDesc = jsonObj.getJSONObject("plant").getJSONObject("lightInfo").getString("preferredLight")
-                recInfo.add(plantLightDesc)
-                val plantTempMin = jsonObj.getJSONObject("plant").getJSONObject("temperatureInfo").getString("minValue")
-                recInfo.add(plantTempMin)
-                val plantTempMax = jsonObj.getJSONObject("plant").getJSONObject("temperatureInfo").getString("maxValue")
-                recInfo.add(plantTempMax)
-                val plantHumidityDesc = jsonObj.getJSONObject("plant").getJSONObject("humidityInfo").getString("description")
-                recInfo.add(plantHumidityDesc)
-                val plantMistingFreq = jsonObj.getJSONObject("plant").getJSONObject("humidityInfo").getString("mistingFrequencyInDays")
-                recInfo.add(plantMistingFreq)
-                val plantWaterFreq = jsonObj.getJSONObject("plant").getJSONObject("waterInfo").getString("wateringFrequencyInDays")
-                recInfo.add(plantWaterFreq)
-                val plantWaterGuide = jsonObj.getJSONObject("plant").getJSONObject("waterInfo").getString("wateringGuideline")
-                recInfo.add(plantWaterGuide)*/
                 val plantLightRec = jsonObj.getJSONObject("lightRecommendation").getString("result")
                 val plantLightAdv = jsonObj.getJSONObject("lightRecommendation").getString("advice")
                 recInfo.add(plantLightRec + "\n" + plantLightAdv)
@@ -157,7 +120,6 @@ suspend fun getRecommendationInfo(plantName: String, lightCurrent: String, humid
                 val plantHumidityRec = jsonObj.getJSONObject("humidityRecommendation").getString("result")
                 val plantHumidityAdv = jsonObj.getJSONObject("humidityRecommendation").getString("advice")
                 recInfo.add(plantHumidityRec + "\n" + plantHumidityAdv)
-                //Log.d("plant desc :", recInfo[0])
 
             }
         } else {
@@ -168,6 +130,7 @@ suspend fun getRecommendationInfo(plantName: String, lightCurrent: String, humid
     return recInfo
 }
 
+// get the flower information and 3d model file from BloomBud API
 suspend fun getPlantInfo(plantId: String): ArrayList<String> {
     var pInfo = ArrayList<String>()
 
@@ -192,8 +155,6 @@ suspend fun getPlantInfo(plantId: String): ArrayList<String> {
                 Log.d("Pretty Printed JSON :", prettyJson)
                 // create a JSONObject from the string
                 val jsonObj = JSONObject(prettyJson)
-                //val plantName = jsonObj.getString("name")
-                //pInfo.add(plantName)
                 val plantDesc = jsonObj.getJSONObject("lifecycleInfo").getString("description")
                 pInfo.add(plantDesc)
                 val plantLightDesc = jsonObj.getJSONObject("lightInfo").getString("preferredLight")
@@ -212,16 +173,6 @@ suspend fun getPlantInfo(plantId: String): ArrayList<String> {
                 pInfo.add(plantWaterGuide)
                 val plantModelURL = jsonObj.getString("arModelUrl")
                 pInfo.add(plantModelURL)
-                /*val plantLightRec = jsonObj.getJSONObject("lightRecommendation").getString("result")
-                val plantLightAdv = jsonObj.getJSONObject("lightRecommendation").getString("advice")
-                recInfo.add(plantLightRec + "\n" + plantLightAdv)
-                val plantTempRec = jsonObj.getJSONObject("temperatureRecommendation").getString("result")
-                val plantTempAdv = jsonObj.getJSONObject("temperatureRecommendation").getString("advice")
-                recInfo.add(plantTempRec + "\n" + plantTempAdv)
-                val plantHumidityRec = jsonObj.getJSONObject("humidityRecommendation").getString("result")
-                val plantHumidityAdv = jsonObj.getJSONObject("humidityRecommendation").getString("advice")
-                recInfo.add(plantHumidityRec + "\n" + plantHumidityAdv)*/
-                //Log.d("plant desc :", pInfo.toString())
 
             }
         } else {

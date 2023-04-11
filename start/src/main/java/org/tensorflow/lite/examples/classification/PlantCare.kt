@@ -26,6 +26,7 @@ var plantInfo = ArrayList<String>()
 
 class PlantCare : AppCompatActivity() {
 
+    // initialise variables
     var plantName = ""
     var plantFile = ""
 
@@ -45,11 +46,12 @@ class PlantCare : AppCompatActivity() {
         loadingBar = findViewById<CardView>(R.id.loading_bar)
 
 
-        // get from prev activity intent
+        // get plant name from previous activity intent
         val it = intent
         plantName = it.getStringExtra("plantName").toString()
         plantNameTV.text = plantName
 
+        // get the image and plant information from the BloomBud API
         GlobalScope.launch {
             showLoadingScreen()
             val imageInfo = getImage(plantName)
@@ -72,17 +74,19 @@ class PlantCare : AppCompatActivity() {
         }
     }
 
+    // start PlantRecommendation activity and pass the plant name
     fun onClickReadingsButton(view: View) {
         val myIntent = Intent(this, PlantRecommendation::class.java)
         myIntent.putExtra("plantName", plantName)
         startActivity(myIntent)
     }
 
+    // start PlantVisualiser activity and pass the plant's 3d model file
     fun onClickVisualiseButton(view: View) {
         val MIN_OPENGL_VERSION = 3.0
         val openGlVersionString = (applicationContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).deviceConfigurationInfo.glEsVersion
 
-        Log.e("AR test", openGlVersionString)
+        // check if the device meets the requirements
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             Log.e("AR test", "Sceneform requires Android N or later")
             Toast.makeText(applicationContext, "Sceneform requires Android N or later", Toast.LENGTH_LONG).show()
